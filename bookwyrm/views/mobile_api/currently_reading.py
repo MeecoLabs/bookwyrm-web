@@ -32,5 +32,4 @@ def currently_reading(request):
 	suggested_books = get_suggested_books(request.user)
 	reading_shelf = next(filter(lambda shelf: shelf['identifier'] == 'reading', suggested_books))
 	books = list(map(map_book, reading_shelf['books']))
-	print("books", books)
 	return JsonResponse(books, safe=False)
