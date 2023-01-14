@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Authorize" %}{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+    <div class="box is-info column is-half">
+        <div class="columns is-mobile">
+            <div class="column">
+                <figure class="image is-64x64">
+                    <img src="{{ client.logo }}" />
+                </figure>
+            </div>
+            <div class="column is-full">
+                <h2 class="title is-4">Authorize <a href="{{ client.url }}">{{ client.name }}</a></h2>
+                <div class="subtitle is-6">{{ client.summary }}</div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <form name="authorize-configm" method="post" action="{% url 'oauth-authorize' %}">
+                    {% csrf_token %}
+                    
+                    <h2 class="subtitle">This will allow <a href="{{ client.url }}">{{ client.name }}</a> to:</h2>
+                    <ul class="block">
+                        {% for scope in scopes %}
+                            <li class="is-success">
+                                <span class="icon icon-check has-text-success" aria-hidden="true"></span>
+                                <span>{{ scope }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">{% trans "Authorize" %}</button>
+                        </div>
+                        <div class="control">
+                            <button class="button" type="submit" name="cancel" value="cancel">{% trans "Cancel" %}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
