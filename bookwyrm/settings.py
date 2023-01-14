@@ -374,6 +374,8 @@ HTTP_X_FORWARDED_PROTO = env.bool("SECURE_PROXY_SSL_HEADER", False)
 if HTTP_X_FORWARDED_PROTO:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+ENABLE_AUTHENTICATED_API = env.bool("ENABLE_AUTHENTICATED_API", False)
+
 # Instance Actor for signing GET requests to "secure mode"
 # Mastodon servers.
 # Do not change this setting unless you already have an existing

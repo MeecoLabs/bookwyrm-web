@@ -197,7 +197,7 @@ class OAuth2ProviderDecorator(object):
 		def decorator(f):
 			@functools.wraps(f)
 			def wrapper(request, *args, **kwargs):
-				if not is_api_request(request):
+				if is_optional and not is_api_request(request):
 					return f(request, *args, **kwargs)
 
 				try:
