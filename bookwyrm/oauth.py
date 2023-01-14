@@ -9,7 +9,6 @@ import functools
 from oauthlib.oauth2 import RequestValidator, WebApplicationServer
 from requests import RequestException
 from bookwyrm.models import OAuthAuthorizationCode, OAuthBearerToken
-from bookwyrm.views.helpers import is_api_request
 
 OAUTH_SCOPES = {
 	"user": "Read/write access to profile info."
