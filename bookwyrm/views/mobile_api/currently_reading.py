@@ -1,5 +1,6 @@
 """ currently reading """
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from bookwyrm.oauth import provider
 from bookwyrm.views.feed import get_suggested_books
@@ -27,7 +28,7 @@ def map_book(book):
 		'latest_readthrough': map_readthrough(book.latest_readthrough),
 	}
 
-@provider.protected_resource_view(scopes=['user', 'shelf'])#, is_optional=False)
+@provider.protected_resource_view(scopes=['user'])
 def currently_reading(request):
 	suggested_books = get_suggested_books(request.user)
 	reading_shelf = next(filter(lambda shelf: shelf['identifier'] == 'reading', suggested_books))
