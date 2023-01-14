@@ -7,6 +7,7 @@ from bookwyrm.settings import DOMAIN, MEDIA_URL
 
 def map_readthrough(readthrough):
 	return {
+		'id': readthrough.id,
 		'progress': readthrough.progress or 0,
 		'mode': readthrough.progress_mode,
 	} if readthrough else None
