@@ -172,9 +172,10 @@ class WyrmRequestValidator(RequestValidator):
 			return False
 		
 		granted_scopes = token.scope.split(" ")
-		for scope in scopes:
-			if scope not in granted_scopes:
-				return False
+		if scopes is not None:
+			for scope in scopes:
+				if scope not in granted_scopes:
+					return False
 
 		request.user = token.user
 		#request.client = token.client
