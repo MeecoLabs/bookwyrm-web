@@ -192,7 +192,7 @@ class OAuth2ProviderDecorator(object):
 	def __init__(self, resource_endpoint):
 		self._resource_endpoint = resource_endpoint
 
-	def protected_resource_view(self, scopes=None):
+	def protected_resource_view(self, scopes):
 		def decorator(f):
 			@functools.wraps(f)
 			def wrapper(request, *args, **kwargs):
@@ -206,9 +206,6 @@ class OAuth2ProviderDecorator(object):
 				valid, r = self._resource_endpoint.verify_request(uri, http_method, body, headers, scopes_list)
 				
 				if valid:
-					request.user = r.user
-					#request.client = r.client
-
 					return f(request, *args, **kwargs)
 				else:
 					return HttpResponseForbidden()
