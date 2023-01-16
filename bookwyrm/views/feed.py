@@ -50,6 +50,17 @@ class Feed(View):
         )
         paginated = Paginator(filtered_activities, PAGE_LENGTH)
 
+        if is_api_request(request):
+            page = paginated.get_page(request.GET.get("page"))
+            data = {
+                "activities": {
+                    "objects": list(map(lambda o: o.to_activity(), page.object_list)),
+                    "next": page.next_page_number() if page.has_next() else None,
+                    "previous": page.previous_page_number() if page.has_previous() else None,
+                },
+            }
+            return ActivitypubResponse(data)
+
         suggestions = suggested_users.get_suggestions(request.user)
 
         data = {
