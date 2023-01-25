@@ -334,6 +334,16 @@ urlpatterns = [
         views.EmailConfig.as_view(),
         name="settings-email-config",
     ),
+    re_path(
+        r"^settings/authors/?$",
+        views.ManageAuthors.as_view(),
+        name="settings-manage-authors",
+    ),
+    re_path(
+        r"^settings/authors/merge/?$",
+        views.MergeAuthors.as_view(),
+        name="settings-merge-authors",
+    ),
     # landing pages
     re_path(r"^about/?$", views.about, name="about"),
     re_path(r"^privacy/?$", views.privacy, name="privacy"),

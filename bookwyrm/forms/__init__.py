@@ -2,6 +2,7 @@
 # site admin
 from .admin import *
 from .author import *
+from .author_admin import *
 from .books import *
 from .edit_user import *
 from .forms import *

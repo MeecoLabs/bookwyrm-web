@@ -1,0 +1,73 @@
+{% extends 'settings/layout.html' %}
+{% load i18n %}{% load humanize %}
+{% block title %}{% trans "Merge Authors" %}{% endblock %}
+
+{% block header %}{% trans "Merge Authors" %}{% endblock %}
+
+{% block panel %}
+<div class="columns">
+	{% url 'settings-manage-authors' as url %}
+	{% for char in alphabet %}
+		<div class="column">
+			<a href="{{ url }}?start={{ char }}">{{ char }}</a>
+		</div>
+	{% endfor %}
+</div>
+<div class="block table-container">
+	<p class="box">Are you sure that you want to merge these authors?</p>
+	<form method="post" action="{% url 'settings-merge-authors' %}" name="merge-authors">
+		{% csrf_token %}
+		<input type="hidden" name="author_ids" value="{{ author_ids|join:',' }}"/>
+
+			<table class="table is-striped is-fullwidth">
+					<tr>
+							<th>
+									{% trans "Field" %}
+							</th>
+							{% for id in author_ids %}
+							<th>
+								Author #{{ id }}
+							</th>
+							{% endfor %}
+							<th>{% trans "Combine fields" %}</th>
+					</tr>
+					{% for field, field_data in author_matrix.items %}
+						<tr>
+							<td>{{ field }}</td>
+							{% for data in field_data.authors %}
+							<td>
+								<div class="control">
+										{% with "field_"|add:field|add:"_"|add:data.id as field_id %}
+										<label class="label" for="{{ field_id }}">
+											<input type="radio" name="field-{{ field }}" id="{{ field_id }}" value="{{ data.id }}" class="radio" {% if data.selected %}checked{% endif %} />
+											{{ data.value }}
+										</label>
+										{% endwith %}
+									</div>
+								</td>
+								{% endfor %}
+								<td class="control">
+									{% if field_data.supports_join %}
+									<label class="label">
+										<input type="radio" name="field-{{ field }}" value="" class="radio" />
+										{% trans "Combine fields" %}
+									</label>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+			</table>
+
+			<div class="block">
+				<button type="submit" class="button is-primary">
+						{% trans "Merge" as text %}
+						<span class="icon icon-plus" title="{{ text }}" aria-hidden="true"></span>
+						<span class="is-sr-only-mobile">{{ text }}</span>
+				</button>
+				<a href="{% url 'settings-manage-authors' %}" class="button">{% trans "Cancel" %}</a>
+			</div>
+		</div>
+	</form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'settings/layout.html' %}
+{% load i18n %}{% load humanize %}
+{% block title %}{% trans "Manage Authors" %}{% endblock %}
+
+{% block header %}{% trans "Manage Authors" %}{% endblock %}
+
+{% block panel %}
+<div class="columns">
+	{% url 'settings-manage-authors' as url %}
+	{% for char in alphabet %}
+		<div class="column">
+			<a href="{{ url }}?start={{ char }}">{{ char }}</a>
+		</div>
+	{% endfor %}
+</div>
+<div class="block table-container">
+    <form method="get" action="{% url 'settings-merge-authors' %}">
+        <table class="table is-striped is-fullwidth">
+            <tr>
+                <th>
+                    {% trans "Name" as text %}
+                    {% include 'snippets/table-sort-header.html' with field="name" sort=sort text=text %}
+                </th>
+                <th>
+                    {% trans "Actions" %}
+                </th>
+            </tr>
+            {% for author in authors %}
+            <tr>
+                <td><a href="{{ author.local_path }}">{{ author.name }}</a></td>
+                <td>
+                    <input type="checkbox" name="authors" value="{{ author.id }}"/>
+                </td>
+            </tr>
+            {% endfor %}
+            {% if not authors %}
+            <tr><td colspan="5"><em>{% trans "No authors found" %}</em></td></tr>
+            {% endif %}
+        </table>
+        <button type="submit">
+            {% trans "Merge" as text %}
+            <span class="icon icon-plus" title="{{ text }}" aria-hidden="true"></span>
+            <span class="is-sr-only-mobile">{{ text }}</span>
+        </button>
+    </form>
+</div>
+
+{% include 'snippets/pagination.html' with page=authors path=request.path %}
+{% endblock %}
