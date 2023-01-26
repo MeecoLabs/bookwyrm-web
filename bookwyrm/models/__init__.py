@@ -3,7 +3,7 @@ import inspect
 import sys
 
 from .book import Book, Work, Edition, BookDataModel
-from .author import Author
+from .author import Author, MergedAuthor
 from .link import Link, FileLink, LinkDomain
 from .connector import Connector
 

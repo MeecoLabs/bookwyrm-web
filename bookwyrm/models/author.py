@@ -71,3 +71,13 @@ class Author(BookDataModel):
         """sets up postgres GIN index field"""
 
         indexes = (GinIndex(fields=["search_vector"]),)
+
+
+class MergedAuthor(models.Model):
+    """keeping track of merged authors"""
+
+    merged_with = models.ForeignKey(
+        "Author",
+        on_delete=models.PROTECT,
+        null=False,
+    )

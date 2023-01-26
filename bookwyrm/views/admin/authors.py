@@ -9,7 +9,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.db.models import Q
 
-from bookwyrm import forms, models
+from bookwyrm import models
 from bookwyrm.settings import PAGE_LENGTH
 
 alphabet = string.ascii_uppercase + "#"
@@ -96,7 +96,6 @@ class MergeAuthors(View):
                 authors[0]["selected"] = True
 
         data = {
-            "form": forms.MergeAuthorsForm(),
             "author_ids": author_ids,
             "author_matrix": author_matrix,
         }
@@ -139,11 +138,11 @@ class MergeAuthors(View):
             book.authors.add(oldest_author)
             book.authors.remove(*other_authors)
 
-        # TODO: create redirects for other_authors
+        # redirect old authors to oldest
+        for author in other_authors:
+            merged_author = models.MergedAuthor(id=author.id, merged_with=oldest_author)
+            merged_author.save()
 
         other_authors.delete()
 
-        # TODO: author redirect should be its own class or a field in the author model
-        # TODO: whenever a link contains an author id, it needs to check redirects first and then follow them
-
-        return redirect('settings-manage-authors')
+        return redirect("settings-manage-authors")
