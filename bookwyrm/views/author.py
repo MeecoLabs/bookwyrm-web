@@ -21,6 +21,11 @@ class Author(View):
     # pylint: disable=unused-argument
     def get(self, request, author_id, slug=None):
         """landing page for an author"""
+
+        merged_author = models.MergedAuthor.objects.filter(id=author_id).first()
+        if merged_author is not None:
+            return redirect(merged_author.merged_with.local_path)
+
         author = get_object_or_404(models.Author, id=author_id)
 
         if is_api_request(request):

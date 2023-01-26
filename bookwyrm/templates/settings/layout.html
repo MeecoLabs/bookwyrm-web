@@ -74,6 +74,15 @@
             </li>
         </ul>
         {% endif %}
+        {% if perms.bookwyrm.moderate_book_data %}
+        <h2 class="menu-label">{% trans "Book Data" %}</h2>
+        <ul class="menu-list">
+            <li>
+                {% url 'settings-manage-authors' as url %}
+                <a href="{{ url }}"{% if url in request.path %} class="is-active" aria-selected="true"{% endif %}>{% trans "Authors" %}</a>
+            </li>
+        </ul>
+        {% endif %}
         {% if perms.bookwyrm.edit_instance_settings %}
         <h2 class="menu-label">{% trans "System" %}</h2>
         <ul class="menu-list">
