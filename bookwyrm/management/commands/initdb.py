@@ -61,6 +61,11 @@ def init_permissions():
             "name": "edit book info",
             "groups": ["admin", "owner", "moderator", "editor"],
         },
+        {
+            "codename": "moderate_book_data",
+            "name": "moderate book data",
+            "groups": ["admin", "owner"],
+        },
     ]
 
     content_type = ContentType.objects.get_for_model(models.User)

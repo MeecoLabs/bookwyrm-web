@@ -7,15 +7,29 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bookwyrm', '0175_merge_0173_author_website_0174_merge_20230111_1523'),
+        ("bookwyrm", "0175_merge_0173_author_website_0174_merge_20230111_1523"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MergedAuthor',
+            name="MergedAuthor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('merged_with', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='bookwyrm.author')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "merged_with",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="bookwyrm.author",
+                    ),
+                ),
             ],
         ),
     ]

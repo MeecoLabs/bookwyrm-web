@@ -17,7 +17,10 @@ alphabet = string.ascii_uppercase + "#"
 
 @method_decorator(login_required, name="dispatch")
 @method_decorator(
-    permission_required("bookwyrm.moderate_book_data", raise_exception=True),
+    permission_required(
+        "bookwyrm.moderate_book_data",
+        raise_exception=True,
+    ),
     name="dispatch",
 )
 class ManageAuthors(View):
