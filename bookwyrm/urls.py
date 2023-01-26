@@ -765,4 +765,9 @@ urlpatterns = [
         r"^summary_revoke_key/?$", views.summary_revoke_key, name="summary-revoke-key"
     ),
     path("guided-tour/<tour>", views.toggle_guided_tour),
+    # oauth
+    re_path(r"^oauth/authorize/?$", views.oauth.Authorize.as_view(), name="oauth-authorize"),
+    re_path(r"^oauth/token/?$", views.oauth.Token.as_view()),
+    # mobile api
+    path('api/currently-reading', views.mobile_api.currently_reading),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

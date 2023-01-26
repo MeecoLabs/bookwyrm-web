@@ -100,8 +100,9 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "bookwyrm.middleware.OAuthAuthenticationMiddleware",
+    "bookwyrm.middleware.RestCsrfViewMiddleware",
     "bookwyrm.middleware.TimezoneMiddleware",
     "bookwyrm.middleware.IPBlocklistMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -373,6 +374,8 @@ TWO_FACTOR_LOGIN_MAX_SECONDS = 60
 HTTP_X_FORWARDED_PROTO = env.bool("SECURE_PROXY_SSL_HEADER", False)
 if HTTP_X_FORWARDED_PROTO:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+ENABLE_AUTHENTICATED_API = env.bool("ENABLE_AUTHENTICATED_API", False)
 
 # Instance Actor for signing GET requests to "secure mode"
 # Mastodon servers.

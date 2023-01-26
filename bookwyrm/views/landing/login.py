@@ -11,6 +11,7 @@ from django.views.decorators.debug import sensitive_variables, sensitive_post_pa
 
 from bookwyrm import forms, models
 from bookwyrm.views.helpers import set_language
+from bookwyrm.oauth import authorize_next_param
 
 
 # pylint: disable=no-self-use
@@ -19,8 +20,9 @@ class Login(View):
 
     def get(self, request, confirmed=None):
         """login page"""
+
         if request.user.is_authenticated:
-            return redirect("/")
+            return redirect(authorize_next_param(request, "/"))
         # send user to the login page
         data = {
             "show_confirmed_email": confirmed,
@@ -34,8 +36,11 @@ class Login(View):
     @method_decorator(sensitive_post_parameters("password"))
     def post(self, request):
         """authentication action"""
+
+        oauth_redirect = authorize_next_param(request)
+
         if request.user.is_authenticated:
-            return redirect("/")
+            return redirect(oauth_redirect or "/")
         login_form = forms.LoginForm(request.POST)
 
         # who do we think is trying to log in
@@ -50,12 +55,14 @@ class Login(View):
             if user.two_factor_auth:
                 request.session["2fa_user"] = user.username
                 request.session["2fa_auth_time"] = time.time()
+                # TODO: if this was an oauth request, add client info
                 return redirect("login-with-2fa")
 
             # otherwise, successful login
             login(request, user)
             user.update_active_date()
             if request.POST.get("first_login"):
+                # TODO: if this was an oauth request, then add client info
                 return set_language(user, redirect("get-started-profile"))
 
             if user.two_factor_auth is None:
@@ -66,13 +73,14 @@ class Login(View):
                 # show the 2fa prompt page
                 return set_language(user, redirect("prompt-2fa"))
 
-            return set_language(user, redirect("/"))
+            return set_language(user, redirect(oauth_redirect or "/"))
 
         user_attempt = models.User.objects.filter(
             username=username, is_active=False
         ).first()
         if user_attempt and user_attempt.deactivation_reason == "pending":
             # maybe the user is pending email confirmation
+            # TODO: if this was an oauth request, then add client info
             return redirect("confirm-email")
         if (
             user_attempt
@@ -80,6 +88,7 @@ class Login(View):
             and user_attempt.check_password(password)
         ):
             # maybe we want to reactivate an account?
+            # TODO: if this was an oauth request, then add client info
             return redirect("prefs-reactivate")
 
         # login errors

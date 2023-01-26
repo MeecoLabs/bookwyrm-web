@@ -17,6 +17,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from bookwyrm import forms, models
 from bookwyrm.settings import DOMAIN, TWO_FACTOR_LOGIN_MAX_SECONDS
 from bookwyrm.views.helpers import set_language
+from bookwyrm.oauth import authorize_next_param
 
 # pylint: disable= no-self-use
 @method_decorator(login_required, name="dispatch")
@@ -182,4 +183,7 @@ class Prompt2FA(View):
 
     def get(self, request):
         """Alert user to the existence of 2FA"""
-        return TemplateResponse(request, "two_factor_auth/two_factor_prompt.html")
+        data = {
+            "next": authorize_next_param(request, "/"),
+        }
+        return TemplateResponse(request, "two_factor_auth/two_factor_prompt.html", data)
